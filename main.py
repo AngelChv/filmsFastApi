@@ -1,8 +1,16 @@
 import uvicorn
 from fastapi import FastAPI
 
-app = FastAPI()
+from app.routers import users, auth
+from database import Base, engine
 
+app = FastAPI(title="API Gestión de películas", description="API para organizar en listas tus películas")
+
+# app.include_router(users.router)
+app.include_router(auth.router)
+
+# Crear las tablas en la base de datos cogiendo las definiciones de models.
+Base.metadata.create_all(bind=engine)
 
 @app.get("/")
 async def root():
