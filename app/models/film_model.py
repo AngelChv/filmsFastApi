@@ -8,7 +8,7 @@ class FilmModel(Base):
     """
     __tablename__ = "films"
 
-    id = Column(Integer, primary_key=True, index=True)
+    id = Column(Integer, primary_key=True, index=True) # por defecto es autoincrement
     title = Column(String, nullable=False)
     director = Column(String, nullable=False)
     year = Column(Integer, nullable=False)

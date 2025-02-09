@@ -1,5 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
+
 from app.routers import users_routes, auth_routes, film_routes
 
 from database import Base, engine
@@ -12,6 +14,15 @@ app.include_router(film_routes.router)
 
 # Crear las tablas en la base de datos cogiendo las definiciones de models.
 Base.metadata.create_all(bind=engine)
+
+# Para que funcione con el cliente de flutter web:
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Cambiar esto a ["http://localhost:3000"] si solo es para desarrollo ¿?
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos los métodos (GET, POST, PUT, DELETE, OPTIONS)
+    allow_headers=["*"],  # Permite todos los encabezados
+)
 
 @app.get("/")
 async def root():
