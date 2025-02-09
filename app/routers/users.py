@@ -1,23 +1,17 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
 from app.models.user import User
-from app.schemas.user import UserResponse, UserCreate
-from database import SessionLocal
+from app.schemas.user import UserResponse
+from database import get_db
 
-# router = APIRouter()
-#
-# def get_db():
-#     db = SessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
-#
-# @router.post("/users/", response_model=UserResponse)
-# def create_user(user: UserCreate, db: Session = Depends(get_db)):
-#     db_user = User(username=user.username, email=user.email, password=user.password)
-#     db.add(db_user)
-#     db.commit()
-#     db.refresh(db_user)
-#     return db_user
+router = APIRouter(prefix="/users", tags=["Users"])
+
+@router.get("/", response_model=List[UserResponse])
+def get_users(db: Session = Depends(get_db)):
+    # Se realiza una consulta y se indica la clase modelo, que representa la tabla de la db.
+    # Se recuperan todas las filas.
+    users = db.query(User).all()
+    return users
