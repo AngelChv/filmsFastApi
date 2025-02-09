@@ -3,8 +3,8 @@ from typing import List
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 
-from app.models.user import User
-from app.schemas.user import UserResponse
+from app.models.user_model import UserModel
+from app.schemas.user_schemas import UserResponse
 from database import get_db
 
 router = APIRouter(prefix="/users", tags=["Users"])
@@ -13,5 +13,5 @@ router = APIRouter(prefix="/users", tags=["Users"])
 def get_users(db: Session = Depends(get_db)):
     # Se realiza una consulta y se indica la clase modelo, que representa la tabla de la db.
     # Se recuperan todas las filas.
-    users = db.query(User).all()
+    users = db.query(UserModel).all()
     return users
