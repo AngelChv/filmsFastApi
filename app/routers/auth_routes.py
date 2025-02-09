@@ -25,4 +25,4 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
             )
 
         # Si no es un error manejado devuelvo el error genérico:
-        raise HTTPException(status_code=500, detail="Error al crear el usuario")
+        raise HTTPException(status_code=500, detail=f"Error al crear el usuario: {str(e)}")
