@@ -8,6 +8,7 @@ class ListCreate(BaseModel):
     name: str
     create_date_time: str
     edit_date_time: str
+    user_id: int
 
     class Config:
         # Antes para las relaciones se usaba esto:
@@ -23,6 +24,7 @@ class ListUpdate(BaseModel):
     name: str
     create_date_time: str
     edit_date_time: str
+    user_id: int
 
     class Config:
         from_attributes = True

@@ -13,7 +13,7 @@ router = APIRouter(prefix="/lists", tags=["Listas"])
 
 
 # Importante! en Depends(get_db) es solo get_db no get_db().
-@router.get("/", response_model=List[ListResponse])
+@router.get("/{user_id}", response_model=List[ListResponse])
 def find_all_by_user_id(user_id: int, db: Session = Depends(get_db)):
     try:
         user = film_service.find_by_id(user_id, db)
@@ -26,12 +26,12 @@ def find_all_by_user_id(user_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/create", response_model=int)
-def create_film(list_create: ListCreate, user_id: int, db: Session = Depends(get_db)):
+def create_film(list_create: ListCreate, db: Session = Depends(get_db)):
     try:
-        user = film_service.find_by_id(user_id, db)
+        user = film_service.find_by_id(list_create.user_id, db)
         if not user:
             raise HTTPException(status_code=404, detail="Usuario no encontrado")
-        return list_service.create_list(list_create, user_id, db)
+        return list_service.create_list(list_create, db)
     except SQLAlchemyError as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Error al crear la lista: {str(e)}")

@@ -14,9 +14,8 @@ def find_all_by_user_id(user_id: int, db: Session):
     return db.query(ListModel).filter(ListModel.user_id == user_id).all()
 
 
-def create_list(list_create: ListCreate, user_id: int, db: Session):
+def create_list(list_create: ListCreate, db: Session):
     db_list = ListModel(**list_create.model_dump())
-    db_list.user_id = user_id
     db.add(db_list)
     db.commit()
     db.refresh(db_list)
