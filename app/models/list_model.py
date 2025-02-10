@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
 
+from app.models.list_films_model import list_films_table
 from database import Base
 
 
@@ -24,4 +25,5 @@ class ListModel(Base):
     # Representa un objeto de la clase indicada, en este caso UserModel, que construye la relación.
     # back_populates indica que la relación es bidireccional y, por lo tanto, debe de haber un atributo lists.
     user = relationship("UserModel", back_populates="lists")  # Relación con el modelo de usuario
+    films = relationship("FilmModel", secondary=list_films_table, back_populates="lists")
 

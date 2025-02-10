@@ -1,4 +1,7 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import relationship
+
+from app.models.list_films_model import list_films_table
 from database import Base
 
 
@@ -15,3 +18,6 @@ class FilmModel(Base):
     duration = Column(Integer, nullable=False)
     description = Column(String, nullable=False)
     poster_path = Column(String, nullable=False)
+
+    # Relaciones
+    lists = relationship("ListModel", secondary=list_films_table, back_populates="films")

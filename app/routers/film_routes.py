@@ -7,13 +7,17 @@ from sqlalchemy.orm import Session
 
 from app.schemas.film_schemas import FilmResponse, FilmCreate, FilmUpdate
 from app.services import film_service
+from auth import oauth2_scheme, verify_token
 from database import get_db
 
 router = APIRouter(prefix="/films", tags=["Películas"])
 
 
 @router.get("/countAll", response_model=int)
-def count_films(db: Session = Depends(get_db)):
+def count_films(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    if not verify_token(token):
+        raise HTTPException(status_code=401, detail="Invalid token")
+
     try:
         return film_service.count(db)
     except SQLAlchemyError as e:
@@ -22,7 +26,10 @@ def count_films(db: Session = Depends(get_db)):
 
 # Importante! en Depends(get_db) es solo get_db no get_db().
 @router.get("/", response_model=List[FilmResponse])
-def get_films(db: Session = Depends(get_db)):
+def get_films(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    if not verify_token(token):
+        raise HTTPException(status_code=401, detail="Invalid token")
+
     try:
         return film_service.get_films(db)
     except SQLAlchemyError as e:
@@ -31,7 +38,10 @@ def get_films(db: Session = Depends(get_db)):
 
 
 @router.get("/{film_id}", response_model=FilmResponse | None)
-def find_by_id(film_id: int, db: Session = Depends(get_db)):
+def find_by_id(film_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    if not verify_token(token):
+        raise HTTPException(status_code=401, detail="Invalid token")
+
     try:
         return film_service.find_by_id(film_id, db)
     except SQLAlchemyError as e:
@@ -40,7 +50,10 @@ def find_by_id(film_id: int, db: Session = Depends(get_db)):
 
 
 @router.post("/create", response_model=int)
-def create_film(film: FilmCreate, db: Session = Depends(get_db)):
+def create_film(film: FilmCreate, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    if not verify_token(token):
+        raise HTTPException(status_code=401, detail="Invalid token")
+
     try:
         return film_service.create_film(film, db)
     except SQLAlchemyError as e:
@@ -49,7 +62,10 @@ def create_film(film: FilmCreate, db: Session = Depends(get_db)):
 
 
 @router.post("/update", response_model=bool)
-def update_film(film: FilmUpdate, db: Session = Depends(get_db)):
+def update_film(film: FilmUpdate, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    if not verify_token(token):
+        raise HTTPException(status_code=401, detail="Invalid token")
+
     try:
         return film_service.update_film(film, db) is not None
     except SQLAlchemyError as e:
@@ -58,9 +74,23 @@ def update_film(film: FilmUpdate, db: Session = Depends(get_db)):
 
 
 @router.delete("/{film_id}", response_model=bool)
-def delete_film(film_id: int, db: Session = Depends(get_db)):
+def delete_film(film_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    if not verify_token(token):
+        raise HTTPException(status_code=401, detail="Invalid token")
+
     try:
         return film_service.delete_film(film_id, db)
     except SQLAlchemyError as e:
         db.rollback()
         raise HTTPException(status_code=500, detail=f"Error al actualizar la película: {str(e)}")
+
+@router.get("/of_list/{list_id}", response_model=List[FilmResponse])
+def find_all_by_list_id(list_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    if not verify_token(token):
+        raise HTTPException(status_code=401, detail="Invalid token")
+
+    try:
+        return film_service.find_all_by_list_id(list_id, db)
+    except SQLAlchemyError as e:
+        db.rollback()
+        raise HTTPException(status_code=500, detail=f"Error al obtener las películas de la lista: {str(e)}")

@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.models.film_model import FilmModel
+from app.models.list_model import ListModel
 from app.schemas.film_schemas import FilmCreate, FilmUpdate
 
 
@@ -51,3 +52,13 @@ def delete_film(film_id: int, db: Session):
 
 def count(db: Session):
     return db.query(FilmModel).count()
+
+
+def find_all_by_list_id(list_id: int, db: Session):
+    # Obtener lista:
+    db_list = db.query(ListModel).filter(ListModel.id == list_id).first()
+    print(db_list)
+    # Sí existe, devolver sus películas.
+    if db_list:
+        return db_list.films
+    return None
