@@ -7,22 +7,26 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.orm import Session
 
 from app.models.user_model import UserModel
-from app.schemas.user_schemas import UserResponse, UserLogin, UserCreate
+from app.schemas.user_schemas import UserResponse, UserLogin, UserCreate, UserLoginResponse
 from app.services import user_service
 from database import get_db
+from auth import verify_token, oauth2_scheme
 
 router = APIRouter(prefix="/users", tags=["Usuarios"])
 
 
 @router.get("/", response_model=List[UserResponse])
-def get_users(db: Session = Depends(get_db)):
+def get_users(db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+    if not verify_token(token):
+        raise HTTPException(status_code=401, detail="Invalid token")
+
     # Se realiza una consulta y se indica la clase modelo, que representa la tabla de la db.
     # Se recuperan todas las filas.
     users = db.query(UserModel).all()
     return users
 
 
-@router.post("/login", response_model=UserResponse | None)
+@router.post("/login", response_model=UserLoginResponse | None)
 def login(user: UserLogin, db: Session = Depends(get_db)):
     try:
         return user_service.login(user, db)
@@ -31,7 +35,7 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail=f"Error al iniciar sesión: {str(e)}")
 
 
-@router.post("/register", response_model=int | None)
+@router.post("/register", response_model=UserLoginResponse | None)
 def register(user: UserCreate, db: Session = Depends(get_db)):
     try:
         return user_service.register(user, db)

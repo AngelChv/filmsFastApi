@@ -17,10 +17,18 @@ class UserLogin(BaseModel):
     username: str
     password: str
 
+class UserLoginResponse(BaseModel):
+    """
+    Representa los datos enviados como respuesta de una petición a la api para el login.
+    """
+    id: int
+    username: str
+    email: EmailStr
+    token: str
 
 class UserResponse(BaseModel):
     """
-    Representa los datos enviados como respuesta de una petición a la api
+    Representa los datos enviados como respuesta de una petición a la api.
     """
     id: int
     username: str

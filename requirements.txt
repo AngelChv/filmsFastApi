@@ -5,3 +5,7 @@ SQLAlchemy~=2.0.38
 passlib~=1.7.4
 pydantic[email]
 starlette~=0.45.3
+python-dotenv~=1.0.1
+pyjwt
+passlib[bcrypt]
+jose~=1.0.0
