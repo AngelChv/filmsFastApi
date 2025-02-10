@@ -20,3 +20,7 @@ def login(user: UserLogin, db: Session) -> Type[UserModel] | None:
     return db.query(UserModel).filter(
         UserModel.username == user.username and UserModel.password == user.password
     ).first()
+
+
+def find_by_user_name(user_name: str, db: Session) -> Type[UserModel] | None:
+    return db.query(UserModel).filter(UserModel.username == user_name).first()
