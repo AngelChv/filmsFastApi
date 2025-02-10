@@ -1,8 +1,6 @@
 from sqlalchemy.orm import Session
 
-from app.models.film_model import FilmModel
 from app.models.list_model import ListModel
-from app.schemas.film_schemas import FilmCreate, FilmUpdate
 from app.schemas.list_schemas import ListCreate, ListUpdate
 
 

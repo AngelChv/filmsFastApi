@@ -10,6 +10,14 @@ class UserCreate(BaseModel):
     password: str
 
 
+class UserLogin(BaseModel):
+    """
+    Representa los datos que se envían en la petición comprobar las credenciales.
+    """
+    username: str
+    password: str
+
+
 class UserResponse(BaseModel):
     """
     Representa los datos enviados como respuesta de una petición a la api

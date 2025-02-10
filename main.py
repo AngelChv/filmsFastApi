@@ -2,14 +2,13 @@ import uvicorn
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
-from app.routers import users_routes, auth_routes, film_routes, list_routes
+from app.routers import users_routes, film_routes, list_routes
 
 from database import Base, engine
 
 app = FastAPI(title="API Gestión de películas", description="API para organizar en listas tus películas")
 
 app.include_router(users_routes.router)
-app.include_router(auth_routes.router)
 app.include_router(film_routes.router)
 app.include_router(list_routes.router)
 
