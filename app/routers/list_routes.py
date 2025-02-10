@@ -57,7 +57,7 @@ def update_list(list_update: ListUpdate, db: Session = Depends(get_db), token: s
 
 
 @router.delete("/{list_id}", response_model=bool)
-def delete_film(list_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+def delete_list(list_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
     if not verify_token(token):
         raise HTTPException(status_code=401, detail="Invalid token")
 
@@ -65,7 +65,7 @@ def delete_film(list_id: int, db: Session = Depends(get_db), token: str = Depend
         return list_service.delete_list(list_id, db)
     except SQLAlchemyError as e:
         db.rollback()
-        raise HTTPException(status_code=500, detail=f"Error al actualizar la lista: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error al eliminar la lista: {str(e)}")
 
 
 @router.post("/add_film/{list_id}/{film_id}", response_model=bool)
@@ -87,7 +87,7 @@ def add_film(list_id: int, film_id: int, db: Session = Depends(get_db), token: s
 
 
 @router.delete("/remove_film/{list_id}/{film_id}", response_model=bool)
-def add_film(list_id: int, film_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+def remove_film(list_id: int, film_id: int, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
     if not verify_token(token):
         raise HTTPException(status_code=401, detail="Invalid token")
 
