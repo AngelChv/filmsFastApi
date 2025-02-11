@@ -1,7 +1,7 @@
 # Gestión de Películas API
 
 Una API para gestionar películas y listas, desarrollada con FastAPI en Python.  
-Esta API implementa operaciones CRUD para películas y listas, cuenta con autenticación mediante JWT y utiliza una base de datos SQLite. Además, se integra con una aplicación Flutter (modo web) que consume la API, mientras que en dispositivos móviles se utiliza una base de datos SQLite local.
+Esta API implementa operaciones CRUD para películas y listas, cuenta con autenticación mediante JWT y utiliza una base de datos SQLite. Además, se integra con una [aplicación Flutter](https://github.com/AngelChv/proyecto_flutter.git) (modo web) que consume la API, mientras que en dispositivos móviles se utiliza una base de datos SQLite local.
 
 ## Enlace a la Memoria del Proyecto
 
