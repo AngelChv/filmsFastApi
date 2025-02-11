@@ -69,4 +69,4 @@ Dado que solo se requiere la parte web de la aplicación, asegúrate de tener in
 
 Clona el repositorio asegurándote de utilizar la rama `fastApi`:
 
-
+```git clone https://github.com/AngelChv/proyecto_flutter.git```
