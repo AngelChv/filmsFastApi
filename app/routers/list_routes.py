@@ -6,7 +6,7 @@ from sqlalchemy.exc import SQLAlchemyError, IntegrityError
 from sqlalchemy.orm import Session
 
 from app.schemas.list_schemas import ListResponse, ListCreate, ListUpdate
-from app.services import list_service, film_service
+from app.services import list_service
 from auth import oauth2_scheme, verify_token
 from database import get_db
 
@@ -20,9 +20,6 @@ def find_all_by_user_id(user_id: int, db: Session = Depends(get_db), token: str 
         raise HTTPException(status_code=401, detail="Invalid token")
 
     try:
-        user = film_service.find_by_id(user_id, db)
-        if not user:
-            raise HTTPException(status_code=404, detail="Usuario no encontrado")
         return list_service.find_all_by_user_id(user_id, db)
     except SQLAlchemyError as e:
         db.rollback()
@@ -30,14 +27,13 @@ def find_all_by_user_id(user_id: int, db: Session = Depends(get_db), token: str 
 
 
 @router.post("/create", response_model=int)
-def create_film(list_create: ListCreate, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
+def create_list(list_create: ListCreate, db: Session = Depends(get_db), token: str = Depends(oauth2_scheme)):
     if not verify_token(token):
         raise HTTPException(status_code=401, detail="Invalid token")
 
+    print(list_create.user_id)
+
     try:
-        user = film_service.find_by_id(list_create.user_id, db)
-        if not user:
-            raise HTTPException(status_code=404, detail="Usuario no encontrado")
         return list_service.create_list(list_create, db)
     except SQLAlchemyError as e:
         db.rollback()
