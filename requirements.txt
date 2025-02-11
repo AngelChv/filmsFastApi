@@ -11,3 +11,4 @@ passlib[bcrypt]
 jose~=1.0.0
 pytest
 pytest-asyncio
+python-multipart
