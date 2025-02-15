@@ -17,7 +17,7 @@ class FilmModel(Base):
     year = Column(Integer, nullable=False)
     duration = Column(Integer, nullable=False)
     description = Column(String, nullable=False)
-    poster_path = Column(String, nullable=False)
+    poster_path = Column(String)
 
     # Relaciones
     lists = relationship("ListModel", secondary=list_films_table, back_populates="films")

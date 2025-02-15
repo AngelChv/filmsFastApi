@@ -1,3 +1,5 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
@@ -10,7 +12,7 @@ class FilmCreate(BaseModel):
     year: int
     duration: int
     description: str
-    poster_path: str
+    poster_path: Optional[str] = None
 
 
 class FilmUpdate(BaseModel):
@@ -23,7 +25,7 @@ class FilmUpdate(BaseModel):
     year: int
     duration: int
     description: str
-    poster_path: str
+    poster_path: Optional[str] = None
 
 
 class FilmResponse(BaseModel):
@@ -36,7 +38,7 @@ class FilmResponse(BaseModel):
     year: int
     duration: int
     description: str
-    poster_path: str
+    poster_path: Optional[str] = None
 
     # Es necesario para trabajar con pydantic y SQLAlchemy
     # Esto indica a pydantic que al instanciar la clase se van a usar atributos de la clase modelo en lugar
