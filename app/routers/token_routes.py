@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from app.schemas.token_schemas import Token
-from app.schemas.user_schemas import UserLogin
+from app.schemas.user_schemas import UserLogin, UserResponse
 from app.services.user_service import find_by_user_name, verify_password
 from auth import create_access_token
 from database import get_db
@@ -22,8 +22,10 @@ def get_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = De
     if not db_user or not verify_password(form_data.password, db_user.password):
         return None # Usuario no encontrado o contraseña incorrecta
 
+    user_response = UserResponse(id=db_user.id, username=db_user.username, email=db_user.email)
+
     # Crear token
-    token = create_access_token(data={"sub": db_user.username}, expires_delta=timedelta(minutes=30))
+    token = create_access_token(user_response, expires_delta=timedelta(minutes=30))
 
     # Devolver el token
     return Token(access_token=token, token_type="Bearer")

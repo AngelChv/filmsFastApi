@@ -5,7 +5,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from app.models.user_model import UserModel
-from app.schemas.user_schemas import UserCreate, UserLogin, UserLoginResponse
+from app.schemas.user_schemas import UserCreate, UserLogin, UserLoginResponse, UserResponse
 from auth import create_access_token, hash_password
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -30,8 +30,11 @@ def register(user: UserCreate, db: Session) -> UserLoginResponse:
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
+
+    user_response = UserResponse(id=db_user.id, username=db_user.username, email=db_user.email)
+
     # Crear el token de acceso
-    token = create_access_token(data={"sub": db_user.username}, expires_delta=timedelta(minutes=30))
+    token = create_access_token(user_response, expires_delta=timedelta(minutes=30))
 
     # Retornar la respuesta con el token
     return UserLoginResponse(id=db_user.id, username=db_user.username, email=db_user.email, token=token)
@@ -46,8 +49,10 @@ def login(user: UserLogin, db: Session) -> UserLoginResponse | None:
     if not db_user or not verify_password(user.password, db_user.password):
         return None # Usuario no encontrado o contraseña incorrecta
 
+    user_response = UserResponse(id=db_user.id, username=db_user.username, email=db_user.email)
+
     # Crear token
-    token = create_access_token(data={"sub": db_user.username}, expires_delta=timedelta(minutes=30))
+    token = create_access_token(user_response, expires_delta=timedelta(minutes=30))
 
     # Devolver usuario con el token:
     return UserLoginResponse(id=db_user.id, username=db_user.username, email=db_user.email, token=token)
