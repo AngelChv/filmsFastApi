@@ -34,7 +34,7 @@ def register(user: UserCreate, db: Session) -> UserLoginResponse:
     user_response = UserResponse(id=db_user.id, username=db_user.username, email=db_user.email)
 
     # Crear el token de acceso
-    token = create_access_token(user_response, expires_delta=timedelta(minutes=30))
+    token = create_access_token(user_response, expires_delta=timedelta(minutes=120))
 
     # Retornar la respuesta con el token
     return UserLoginResponse(id=db_user.id, username=db_user.username, email=db_user.email, token=token)
@@ -52,7 +52,7 @@ def login(user: UserLogin, db: Session) -> UserLoginResponse | None:
     user_response = UserResponse(id=db_user.id, username=db_user.username, email=db_user.email)
 
     # Crear token
-    token = create_access_token(user_response, expires_delta=timedelta(minutes=30))
+    token = create_access_token(user_response, expires_delta=timedelta(minutes=120))
 
     # Devolver usuario con el token:
     return UserLoginResponse(id=db_user.id, username=db_user.username, email=db_user.email, token=token)

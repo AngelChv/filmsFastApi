@@ -15,7 +15,7 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 load_dotenv()
 SECRET_KEY = os.getenv("SECRET_KEY", "clave_por_defecto")
 ALGORITHM = os.getenv("ALGORITHM", "HS256")
-ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 30))
+ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", 120))
 
 
 def create_access_token(user_response: UserResponse, expires_delta: timedelta | None = None):
